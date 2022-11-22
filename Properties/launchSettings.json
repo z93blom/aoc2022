@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "aoc": {
+      "commandName": "Project",
+      "commandLineArgs": "last",
+      "workingDirectory": "$(SolutionDirectory)"
+    }
+  }
+}
