@@ -7,7 +7,7 @@ namespace AdventOfCode;
 
 public class Updater
 {
-    public const string SessionEnvironmentName = "AOC-SESSION";
+    public const string SessionEnvironmentName = "AOCSESSION";
 
     public static async Task Update(int year, int day, IEnumerable<Type> solvers)
     {

@@ -16,9 +16,9 @@ the cookie in the Request Headers (for example https://adventofcode.com/2018/day
 Then you can set it:
 
 ```
-Powershell: $Env:AOC-SESSION = "..."
+Powershell: $Env:AOCSESSION = "..."
 
-Command Prompt: set AOC-SESSION = ...
+Command Prompt: set AOCSESSION = ...
 ```
 
 ## Running
