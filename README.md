@@ -1,5 +1,5 @@
 
-# Advent of Code 2021
+# Advent of Code 2022
 My C# solutions to the advent of code problems.
 Check out http://adventofcode.com.
 
@@ -25,7 +25,7 @@ Command Prompt: set AOC-SESSION = ...
 
 To run the project:
 
-1. Install .NET (6.0 or greater)
+1. Install .NET (7.0 or greater)
 2. Clone the repo
 3. Get help with `dotnet run`
 ```
