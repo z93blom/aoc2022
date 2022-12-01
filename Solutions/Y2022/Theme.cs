@@ -1,4 +1,3 @@
-
 namespace AdventOfCode.Y2022;
 
 class Theme : ITheme
