@@ -10,13 +10,13 @@ namespace AdventOfCode.Generator
                     from line in calendar.Lines
                     select string.Join("", from token in line select token.Text));
                     
-            return $@"
-               > # Advent of Code ({calendar.Year})
-               > Check out http://adventofcode.com/{calendar.Year}.
-               > ```
-               > {calendarLines}
-               > ```
-               > ".StripMargin("> ");
+            return $"""
+               # Advent of Code ({calendar.Year})
+               Check out http://adventofcode.com/{calendar.Year}.
+               ```
+               {calendarLines}
+               ```
+               """;
         }
     }
 }

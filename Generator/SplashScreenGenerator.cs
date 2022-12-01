@@ -6,18 +6,19 @@ namespace AdventOfCode.Generator;
 public class SplashScreenGenerator {
     public static string Generate(Calendar calendar, Dictionary<string, int> themeColors) {
         string calendarPrinter = CalendarPrinter(calendar, themeColors);
-        return $@"
-            |namespace AdventOfCode.Y{calendar.Year};
-            |
-            |class SplashScreenImpl : SplashScreen
-            |{{
-            |    public override void Show()
-            |    {{
-            |        WriteFiglet(""Advent of code {calendar.Year}"", Spectre.Console.Color.Yellow);
-            |        {calendarPrinter.Indent(8)}
-            |        Console.WriteLine();
-            |    }}
-            |}}".StripMargin();
+        return $$"""
+            namespace AdventOfCode.Y{{calendar.Year}};
+            
+            class SplashScreenImpl : SplashScreen
+            {
+                public override void Show()
+                {
+                    WriteFiglet("Advent of code {{calendar.Year}}", Spectre.Console.Color.Yellow);
+                    {{calendarPrinter.Indent(8)}}
+                    Console.WriteLine();
+                }
+            }
+            """;
     }
 
     private static string CalendarPrinter(Calendar calendar, Dictionary<string, int> themeColors) {
