@@ -10,9 +10,11 @@ namespace AdventOfCode.Utilities
     {
         private static readonly Regex _intRegex = new(@"([+-]?\d+)", RegexOptions.Compiled);
 
+        private static readonly string[] LineEndings = { "\r\n", "\r", "\n" };
+
         public static IEnumerable<string> Lines(this string s, StringSplitOptions options = StringSplitOptions.RemoveEmptyEntries)
         {
-            return s.Split(new[] {'\r', '\n'}, options);
+            return s.Split(LineEndings, options);
         }
 
         public static IEnumerable<int> Integers(this string s)
