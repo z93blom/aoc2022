@@ -55,7 +55,6 @@ public static class Theme
             ["calendar-color-r"] = 0xff0000,
             ["calendar-color-s"] = 0xffffff,
             ["calendar-color-t"] = 0xcccccc,
-            ["calendar-color-u"] = 0x5eabb4,
             ["calendar-color-w"] = 0xcccccc,
             ["calendar-color-w1"] = 0x00c8ff,
             ["calendar-color-w2"] = 0x00b5ed,
