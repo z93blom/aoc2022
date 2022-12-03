@@ -1,5 +1,5 @@
-using System.Diagnostics;
 using AdventOfCode.Utilities;
+using LanguageExt;
 
 namespace AdventOfCode.Y2022.Day03;
 
@@ -46,13 +46,8 @@ class Solution : ISolver
         var value = input.Lines()
             .GroupBy(l => i++/3)
             .Select(g => g.ToArray())
-            .Select(g =>
-            {
-                var set = g[0].ToHashSet();
-                set.IntersectWith(g[1]);
-                set.IntersectWith(g[2]);
-                return set.ToArray()[0];
-            })
+            .Select(g => new Set<char>(g[0]).Intersect(g[1]).Intersect(g[2]))
+            .Select(set => set.ToArr()[0])
             .Select(Priority)
             .Sum();
             //.ToArray();
