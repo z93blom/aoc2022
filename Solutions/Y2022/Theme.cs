@@ -11,6 +11,7 @@ class Theme : ITheme
         themeColors["calendar-color-g2"] = 0x7fbd39;
         themeColors["calendar-color-g3"] = 0x427322;
         themeColors["calendar-color-g3"] = 0x01461f;
+        themeColors["calendar-color-g4"] = 0x01461f;
 
         return themeColors;
     }
