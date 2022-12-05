@@ -33,7 +33,7 @@ namespace AdventOfCode.Utilities
                 {
                     var start = position;
                     position += 1;
-                    while (char.IsDigit(t[position]))
+                    while (position < t.Length && char.IsDigit(t[position]))
                     {
                         position++;
                     }
