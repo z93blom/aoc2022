@@ -125,8 +125,6 @@ public class Runner
                             stopWatch.Restart();
                             iline++;
                         }
-
-
                     }
                 });
         }

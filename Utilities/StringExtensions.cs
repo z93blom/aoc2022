@@ -20,7 +20,7 @@ namespace AdventOfCode.Utilities
         public static IEnumerable<int> Integers(this string s)
         {
             var matches = _intRegex.Matches(s);
-            return matches.Cast<Match>().SelectMany(m => m.Captures.Cast<Capture>().Select(v => int.Parse(v.Value)));
+            return matches.SelectMany(m => m.Captures.Select(v => int.Parse(v.Value)));
         }
 
         public static IEnumerable<int> ParseNumbers(this string t)
@@ -95,7 +95,7 @@ namespace AdventOfCode.Utilities
         }
 
         /// <summary>
-        /// Removes all occurances of a character from a string.
+        /// Removes all occurrences of a character from a string.
         /// </summary>
         /// <param name="s">The string being changed.</param>
         /// <param name="c">The character to be removed.</param>
@@ -106,7 +106,7 @@ namespace AdventOfCode.Utilities
         }
 
         /// <summary>
-        /// Removes all occurances of the characters from a string.
+        /// Removes all occurrences of the characters from a string.
         /// </summary>
         /// <param name="s">The string being changed.</param>
         /// <param name="characters">The characters to be removed from the string.</param>

@@ -7,7 +7,8 @@ namespace AdventOfCode;
 public abstract class SplashScreen
 {
     readonly FigletFont _font;
-    public SplashScreen()
+
+    protected SplashScreen()
     {
         _font = FigletFont.Parse(Encoding.UTF8.GetString(Resource.serifcap));
     }
