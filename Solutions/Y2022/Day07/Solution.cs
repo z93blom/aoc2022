@@ -25,7 +25,7 @@ class Solution : ISolver
     private static (Dir rootDir, HashSet<Dir> directories) CalculateTree(string input)
     {
         var lines = input.Lines().ToArray();
-        var i = 1; // Skip the first cd /
+        var i = 0;
         var rootDir = new Dir("", null);
         var directories = new HashSet<Dir>(new[] { rootDir });
         var currentDir = rootDir;
@@ -41,7 +41,7 @@ class Solution : ISolver
                         {
                             if (commandArgs[2] == "..")
                             {
-                                currentDir = currentDir.Parent;
+                                currentDir = currentDir.Parent ?? currentDir;
                             }
                             else if (commandArgs[2] == "/")
                             {
@@ -104,7 +104,7 @@ class Solution : ISolver
     class Dir
     {
         public string Name { get; }
-        public Dir Parent { get; }
+        public Dir? Parent { get; }
 
         public Dir(string name, Dir? parent)
         {
