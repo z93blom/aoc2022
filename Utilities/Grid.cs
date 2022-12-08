@@ -43,6 +43,27 @@ public class Grid<T>
         }
     }
 
+    public IEnumerable<Point2> YSlice(long x)
+    {
+        for (var y = 0; y < Height; y++)
+        {
+            yield return new Point2(x, y);
+        }
+    }
+
+    public IEnumerable<Point2> XSlice(long y)
+    {
+        for (var x = 0; x < Width; x++)
+        {
+            yield return new Point2(x, y);
+        }
+    }
+
+    public bool IsEdge(Point2 p)
+    {
+        return p.X == 0 || p.Y == 0 || p.X == Width - 1 || p.Y == Height - 1;
+    }
+
     public IEnumerable<Point2> Points
     {
         get

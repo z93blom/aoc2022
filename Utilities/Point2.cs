@@ -38,6 +38,10 @@ public readonly struct Point2
             yield return new Point2(X - 1, Y - 1);
         }
     }
+    public Point2 Left => new Point2(X - 1, Y);
+    public Point2 Right => new Point2(X + 1, Y);
+    public Point2 Above => new Point2(X, Y - 1);
+    public Point2 Below => new Point2(X, Y + 1);
 
     public override string ToString()
     {
