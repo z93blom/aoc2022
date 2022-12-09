@@ -1,6 +1,6 @@
 ﻿namespace AdventOfCode.Utilities;
 
-public record Point2(long X, long Y)
+public record struct Point2(long X, long Y)
 {
     public IEnumerable<Point2> OrthogonalPoints
     {
