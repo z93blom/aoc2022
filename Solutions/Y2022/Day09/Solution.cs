@@ -108,7 +108,7 @@ class Solution : ISolver
 
     public static Point2 RecalculateTail(Point2 p1, Point2 p2, Func<Point2, Point2> repositionFunc)
     {
-        if (p1.AdjacentPoints.Contains(p2) || Equals(p1, p2))
+        if (p1.AdjacentPoints.Contains(p2) || p1 == p2)
         {
             // The tail is already touching the head. Does not move.
             return p2;
