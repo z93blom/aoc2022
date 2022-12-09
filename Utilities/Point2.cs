@@ -40,8 +40,13 @@ public readonly struct Point2
     }
     public Point2 Left => new Point2(X - 1, Y);
     public Point2 Right => new Point2(X + 1, Y);
-    public Point2 Above => new Point2(X, Y - 1);
-    public Point2 Below => new Point2(X, Y + 1);
+    public Point2 Above => new Point2(X, Y + 1);
+    public Point2 Below => new Point2(X, Y - 1);
+
+    public bool IsLeftOf(Point2 p) => this.X < p.X;
+    public bool IsRightOf(Point2 p) => this.X > p.X;
+    public bool IsAboveOf(Point2 p) => this.Y > p.Y;
+    public bool IsBelowOf(Point2 p) => this.Y < p.Y;
 
     public override string ToString()
     {
