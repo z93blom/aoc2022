@@ -17,18 +17,18 @@ namespace AdventOfCode.Generator
                     public int Day => {{problem.Day}};
                     public string GetName() => "{{problem.Title}}";
 
-                    public IEnumerable<object> Solve(string input)
+                    public IEnumerable<object> Solve(string input, Func<TextWriter> getOutputFunction)
                     {
-                        yield return PartOne(input);
-                        yield return PartTwo(input);
+                        yield return PartOne(input, getOutputFunction);
+                        yield return PartTwo(input, getOutputFunction);
                     }
 
-                    static object PartOne(string input)
+                    static object PartOne(string input, Func<TextWriter> getOutputFunction)
                     {
                         return 0;
                     }
 
-                    static object PartTwo(string input)
+                    static object PartTwo(string input, Func<TextWriter> getOutputFunction)
                     {
                         return 0;
                     }

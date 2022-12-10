@@ -101,7 +101,7 @@ public class Runner
                             var elapsed = stopWatch.Elapsed;
                             var parts = new IRenderable[5];
 
-                            var output = outputStreams.ContainsKey(partNumber) ? outputStreams[partNumber].ToString() : "";
+                            var output = outputStreams.TryGetValue(partNumber, out var writer) ? writer.ToString() : "";
 
                             if (refout == null || refout.Length <= iline)
                             {
