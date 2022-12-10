@@ -8,7 +8,7 @@ class Solution : ISolver
     public int Day => 2;
     public string GetName() => "Rock Paper Scissors";
 
-    public IEnumerable<object> Solve(string input)
+    public IEnumerable<object> Solve(string input, Func<TextWriter> getOutputFunction)
     {
         yield return PartOne(input);
         yield return PartTwo(input);

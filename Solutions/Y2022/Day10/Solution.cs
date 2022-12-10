@@ -9,10 +9,10 @@ class Solution : ISolver
     public int Day => 10;
     public string GetName() => "Cathode-Ray Tube";
 
-    public IEnumerable<object> Solve(string input)
+    public IEnumerable<object> Solve(string input, Func<TextWriter> getOutputFunction)
     {
         yield return PartOne(input);
-        yield return PartTwo(input);
+        yield return PartTwo(input, getOutputFunction);
     }
 
     static object PartOne(string input)
@@ -60,11 +60,10 @@ class Solution : ISolver
         return registerValueDuringCycle;
     }
 
-    static object PartTwo(string input)
+    static object PartTwo(string input, Func<TextWriter> output)
     {
         var registerValueDuringCycle = RegisterValueDuringCycle(input);
-        var sb = new StringBuilder();
-        sb.AppendLine();
+        var writer = output();
         var cycle = 1;
         while (cycle < registerValueDuringCycle.Count)
         {
@@ -72,22 +71,20 @@ class Solution : ISolver
             var x = (cycle - 1) % 40;
             if (spritePosition == x || spritePosition - 1 == x || spritePosition + 1 == x)
             {
-                sb.Append('#');
+                writer.Write('#');
             }
             else
             {
-                sb.Append('.');
+                writer.Write('.');
             }
 
             if (x == 39)
             {
-                sb.AppendLine();
+                writer.WriteLine();
             }
 
             cycle++;
         }
-
-        Console.Write(sb.ToString());
 
         return "PHLHJGZA";
     }

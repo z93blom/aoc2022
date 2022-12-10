@@ -7,5 +7,5 @@ public interface ISolver
     
     int Day { get; }
 
-    IEnumerable<object> Solve(string input);
+    IEnumerable<object> Solve(string input, Func<TextWriter> getOutputFunction);
 }

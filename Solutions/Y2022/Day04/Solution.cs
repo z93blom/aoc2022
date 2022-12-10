@@ -9,7 +9,7 @@ class Solution : ISolver
     public int Day => 4;
     public string GetName() => "Camp Cleanup";
 
-    public IEnumerable<object> Solve(string input)
+    public IEnumerable<object> Solve(string input, Func<TextWriter> getOutputFunction)
     {
         var pairs = input.Lines()
             .Select(s => s.Split(","))

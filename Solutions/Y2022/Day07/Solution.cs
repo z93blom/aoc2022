@@ -8,7 +8,7 @@ class Solution : ISolver
     public int Day => 7;
     public string GetName() => "No Space Left On Device";
 
-    public IEnumerable<object> Solve(string input)
+    public IEnumerable<object> Solve(string input, Func<TextWriter> getOutputFunction)
     {
         yield return PartOne(input);
         yield return PartTwo(input);

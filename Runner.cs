@@ -63,6 +63,7 @@ public class Runner
                         table.AddColumn("[bold]Value[/]");
                         table.AddColumn("Time (ms)", tc => tc.Alignment(Justify.Right));
                         table.AddColumn("Error");
+                        table.AddColumn("Output");
                         fileNode.AddNode(table);
                         ctx.Refresh();
 
@@ -70,6 +71,7 @@ public class Runner
                         var valueIndex = 1;
                         var timeIndex = 2;
                         var errorIndex = 3;
+                        var outputIndex = 4;
 
                         var refoutFile = file.Replace(".in", ".refout");
                         var refout = File.Exists(refoutFile) ? File.ReadAllLines(refoutFile) : null;
@@ -82,10 +84,24 @@ public class Runner
                         var iline = 0;
                         stopWatch.Start();
                         var partNumber = 1;
-                        foreach (var line in solver.Solve(input))
+                        var outputStreams = new Dictionary<int, StringWriter>();
+
+                        var func = new Func<TextWriter>(() =>
+                        {
+                            if (!outputStreams.ContainsKey(partNumber))
+                            {
+                                outputStreams[partNumber] = new StringWriter();
+                            }
+
+                            return outputStreams[partNumber];
+                        });
+
+                        foreach (var line in solver.Solve(input, func))
                         {
                             var elapsed = stopWatch.Elapsed;
-                            var parts = new IRenderable[4];
+                            var parts = new IRenderable[5];
+
+                            var output = outputStreams.ContainsKey(partNumber) ? outputStreams[partNumber].ToString() : "";
 
                             if (refout == null || refout.Length <= iline)
                             {
@@ -119,6 +135,8 @@ public class Runner
                             {
                                 parts[timeIndex] = new Markup($"[darkgreen]{milliseconds:N3}[/]");
                             }
+
+                            parts[outputIndex] = new Text(output);
 
                             table.AddRow(parts);
                             ctx.Refresh();

@@ -9,7 +9,7 @@ class Solution : ISolver
     public int Day => 3;
     public string GetName() => "Rucksack Reorganization";
 
-    public IEnumerable<object> Solve(string input)
+    public IEnumerable<object> Solve(string input, Func<TextWriter> getOutputFunction)
     {
         yield return PartOne(input);
         yield return PartTwo(input);

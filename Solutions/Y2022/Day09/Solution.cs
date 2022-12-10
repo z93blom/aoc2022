@@ -13,7 +13,7 @@ class Solution : ISolver
     public int Day => 9;
     public string GetName() => "Rope Bridge";
 
-    public IEnumerable<object> Solve(string input)
+    public IEnumerable<object> Solve(string input, Func<TextWriter> getOutputFunction)
     {
         yield return PartOne(input);
         yield return PartTwo(input);

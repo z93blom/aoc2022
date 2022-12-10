@@ -9,7 +9,7 @@ class Solution : ISolver
     public int Day => 6;
     public string GetName() => "Tuning Trouble";
 
-    public IEnumerable<object> Solve(string input)
+    public IEnumerable<object> Solve(string input, Func<TextWriter> getOutputFunction)
     {
         yield return PartOne(input);
         yield return PartTwo(input);
