@@ -19,6 +19,7 @@ namespace AdventOfCode.Generator
 
                     public IEnumerable<object> Solve(string input, Func<TextWriter> getOutputFunction)
                     {
+                        // var emptyOutput = () => new NullTextWriter();
                         yield return PartOne(input, getOutputFunction);
                         yield return PartTwo(input, getOutputFunction);
                     }

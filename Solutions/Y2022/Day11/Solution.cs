@@ -1,5 +1,6 @@
 using System.Diagnostics.Eventing.Reader;
 using AdventOfCode.Utilities;
+using QuikGraph;
 
 namespace AdventOfCode.Y2022.Day11;
 
@@ -11,8 +12,9 @@ class Solution : ISolver
 
     public IEnumerable<object> Solve(string input, Func<TextWriter> getOutputFunction)
     {
-        yield return PartOne(input, getOutputFunction);
-        yield return PartTwo(input, getOutputFunction);
+        var emptyOutput = () => new NullTextWriter();
+        yield return PartOne(input, emptyOutput);
+        yield return PartTwo(input, emptyOutput);
     }
 
     static object PartOne(string input, Func<TextWriter> getOutputFunction)
@@ -27,11 +29,11 @@ class Solution : ISolver
             }
         }
 
-        //var ii = 0;
-        //foreach (var monkey in monkeys)
-        //{
-        //    output.WriteLine($"Monkey {ii++}: inspected items {monkey.TotalNumberOfInspectedItems} times.");
-        //}
+        var ii = 0;
+        foreach (var monkey in monkeys)
+        {
+            output.WriteLine($"Monkey {ii++}: inspected items {monkey.TotalNumberOfInspectedItems} times.");
+        }
 
         var result = monkeys.OrderByDescending(m => m.TotalNumberOfInspectedItems).Take(2).Aggregate(1L, (v, m) => m.TotalNumberOfInspectedItems * v);
         return result;
@@ -51,17 +53,17 @@ class Solution : ISolver
                 monkey.Inspect2(divisor);
             }
             
-            //if ((round + 1) % 1_000 == 0 || round == 19 || round == 0)
-            //{
-            //    var i = 0;
-            //    output.WriteLine($"== After round {round + 1} ==");
-            //    foreach (var monkey in monkeys)
-            //    {
-            //        output.WriteLine($"Monkey {i++}: inspected items {monkey.TotalNumberOfInspectedItems} times.");
-            //    }
+            if ((round + 1) % 1_000 == 0 || round == 19 || round == 0)
+            {
+                var i = 0;
+                output.WriteLine($"== After round {round + 1} ==");
+                foreach (var monkey in monkeys)
+                {
+                    output.WriteLine($"Monkey {i++}: inspected items {monkey.TotalNumberOfInspectedItems} times.");
+                }
 
-            //    output.WriteLine();
-            //}
+                output.WriteLine();
+            }
         }
 
         var result = monkeys.OrderByDescending(m => m.TotalNumberOfInspectedItems).Take(2).Aggregate(1L, (v, m) => m.TotalNumberOfInspectedItems * v);
