@@ -106,7 +106,7 @@ class Solution : ISolver
 
     private static Func<Int128, Int128> GetModifierOperation(string[] parts)
     {
-        if (parts.Length != 6) { throw new ArgumentOutOfRangeException("Unknown operation."); }
+        if (parts.Length != 6) { throw new ArgumentOutOfRangeException(nameof(parts), "Unknown operation."); }
         // 3 = operand1
         // 4 = op
         // 5 = operand2
@@ -159,13 +159,14 @@ class Solution : ISolver
         public List<Int128> ItemWorryLevels { get; set; } = new();
         public long Divisor { get; set; } = 1;
 
-        public Func<Int128, Int128> ModifierOperation { get; set; }
+        public Func<Int128, Int128> ModifierOperation { get; set; } = v => v;
 
-        public Monkey TrueMonkey { get; set; }
-        public Monkey FalseMonkey { get; set; }
+        public Monkey? TrueMonkey { get; set; }
+        public Monkey? FalseMonkey { get; set; }
 
         public long TotalNumberOfInspectedItems = 0;
 
+#pragma warning disable CS8602
         public void Inspect()
         {
             TotalNumberOfInspectedItems += ItemWorryLevels.Count;
@@ -205,6 +206,7 @@ class Solution : ISolver
 
             ItemWorryLevels.Clear();
         }
+#pragma warning restore CS8602
 
     }
 }
