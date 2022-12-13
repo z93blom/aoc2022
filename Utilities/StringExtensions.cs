@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -45,6 +46,53 @@ namespace AdventOfCode.Utilities
                     position++;
                 }
             }
+        }
+
+        public static bool TryReadNested(this string t, char startCharacter, char endCharacter, int startIndex, out int start, out int end )
+        {
+            start = startIndex;
+            while (start < t.Length)
+            {
+                if (t[start] == startCharacter)
+                {
+                    break;
+                }
+
+                start++;
+            }
+
+            if (start >= t.Length)
+            {
+                end = t.Length;
+                return false;
+            }
+
+            end = start;
+            var nesting = 0;
+            while (end < t.Length)
+            {
+                if (t[end] == startCharacter)
+                {
+                    nesting++;
+                }
+                else if (t[end] == endCharacter)
+                {
+                    nesting--;
+                    if (nesting == 0)
+                    {
+                        break;
+                    }
+                }
+
+                end++;
+            }
+
+            if (end < t.Length)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public static string Replace(this string text, int index, int length, string replacement)
@@ -136,5 +184,7 @@ namespace AdventOfCode.Utilities
 
             return s;
         }
+
+
     }
 }
