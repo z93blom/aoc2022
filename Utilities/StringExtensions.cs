@@ -131,6 +131,12 @@ namespace AdventOfCode.Utilities
             return match.Success;
         }
 
+        public static IEnumerable<Match> Matches(this string s, string pattern)
+        {
+            var collection = Regex.Matches(s, pattern);
+            return collection;
+        }
+
         public static IEnumerable<Group[]> Matches(this IEnumerable<string> strings, string pattern)
         {
             foreach(var s in strings)
