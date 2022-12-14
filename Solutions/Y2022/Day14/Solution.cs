@@ -66,9 +66,6 @@ class Solution : ISolver
 
     private static Grid<char> GetGrid(string input, bool addFloor = false)
     {
-        // Figure out the min and max x, y
-        //if (!input.Matches(@"(\d+),(\d+)", out var groups)) throw new Exception("Coding error");
-        //var groups = input.Lines().Matches(@"(\d+),(\d+)").ToArray();
         var points = input.Lines()
             .Select(l =>
                 l.Groups(@"(\d+),(\d+)")

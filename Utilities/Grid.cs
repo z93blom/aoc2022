@@ -2,6 +2,10 @@
 
 namespace AdventOfCode.Utilities;
 
+/// <summary>
+/// Represents a grid of <see cref="Point2"/>, each point having a value of <see cref="T"/>.
+/// </summary>
+/// <typeparam name="T">The type of value to store for each point in the grid.</typeparam>
 public class Grid<T>
 {
     public YAxisDirection YAxisDirection => Offset.YAxis;

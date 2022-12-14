@@ -2,6 +2,10 @@
 
 namespace AdventOfCode.Utilities;
 
+/// <summary>
+/// Represents an edge from one <see cref="Point2Node{T}"/> to another <see cref="Point2Node{T}"/>
+/// </summary>
+/// <typeparam name="T">The type of data that each node holds.</typeparam>
 public class Point2Edge<T> : IEdge<Point2Node<T>>
 {
     public Point2Node<T> Source { get; }

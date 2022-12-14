@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Security.Principal;
 using System.Text;
@@ -124,7 +125,7 @@ namespace AdventOfCode.Utilities
             return s[startIndex..endIndex];
         }
 
-        public static bool Matches(this string s, string pattern, out Group[] groups)
+        public static bool Matches(this string s, [StringSyntax(StringSyntaxAttribute.Regex)] string pattern, out Group[] groups)
         {
             var match = Regex.Match(s, pattern);
             groups = match.Groups.Cast<Group>().Skip(1).ToArray();
@@ -137,7 +138,13 @@ namespace AdventOfCode.Utilities
             return collection;
         }
 
-        public static IEnumerable<Group[]> Groups(this string s, string pattern)
+        /// <summary>
+        /// Returns all the captured groups for the indicated pattern. Will only return the groups indicated by parenthesis.
+        /// </summary>
+        /// <param name="s">The string to apply the regular expression search pattern to.</param>
+        /// <param name="pattern">The regular expression search pattern.</param>
+        /// <returns></returns>
+        public static IEnumerable<Group[]> Groups(this string s, [StringSyntax(StringSyntaxAttribute.Regex)] string pattern)
         {
             var collection = Regex.Matches(s, pattern);
             foreach (Match match in collection)
@@ -147,7 +154,7 @@ namespace AdventOfCode.Utilities
         }
 
 
-        public static IEnumerable<Group[]> Matches(this IEnumerable<string> strings, string pattern)
+        public static IEnumerable<Group[]> Matches(this IEnumerable<string> strings, [StringSyntax(StringSyntaxAttribute.Regex)] string pattern)
         {
             foreach(var s in strings)
             {
