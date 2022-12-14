@@ -4,7 +4,7 @@ namespace AdventOfCode.Utilities;
 
 public class Grid<T>
 {
-    public YAxisDirection YAxisDirection { get; }
+    public YAxisDirection YAxisDirection => Offset.YAxis;
     private Point2 Offset { get; }
     public long Width { get; }
     public long Height { get; }
@@ -17,43 +17,23 @@ public class Grid<T>
     }
 
     public Grid(long width, long height, YAxisDirection yAxisDirection)
-        : this(width, height, Point2.Origin, yAxisDirection)
+        : this(width, height, new Point2(0, 0, yAxisDirection))
     {
     }
 
-    public Grid(long width, long height, Point2 offset, YAxisDirection yAxisDirection)
+    public Grid(long width, long height, Point2 offset)
     {
-        YAxisDirection = yAxisDirection;
         Offset = offset;
         Width = width;
         Height = height;
         _values = new T[Width, Height];
     }
 
-    public Grid(Point2 corner, Point2 oppositeCorner, YAxisDirection yAxisDirection)
-    {
-        YAxisDirection = yAxisDirection;
-        var offset = new Point2(Math.Min(corner.X, oppositeCorner.X), Math.Min(corner.Y, oppositeCorner.Y));
-
-        Offset = offset;
-        Width = Math.Max(corner.X, oppositeCorner.X) - offset.X;
-        Height = Math.Max(corner.X, oppositeCorner.X) - offset.Y;
-        _values = new T[Width, Height];
-    }
-
     public T this[long x, long y]
     {
-        get => this[new Point2(x, y)];
-        set => this[new Point2(x, y)] = value;
+        get => this[new Point2(x, y, YAxisDirection)];
+        set => this[new Point2(x, y, YAxisDirection)] = value;
     }
-
-    public Point2 Right(Point2 p) => p with { X = p.X + 1 };
-
-    public Point2 Left(Point2 p) => p with { X = p.X - 1 };
-
-    public Point2 Above(Point2 p) => p with { Y = YAxisDirection == YAxisDirection.ZeroAtBottom ? p.Y + 1 : p.Y - 1 };
-
-    public Point2 Below(Point2 p) => p with { Y = YAxisDirection == YAxisDirection.ZeroAtBottom ? p.Y - 1 : p.Y + 1 };
 
     public T this[Point2 p]
     {
@@ -81,7 +61,7 @@ public class Grid<T>
     {
         for (var y = Offset.Y; y < Offset.Y + Height; y++)
         {
-            yield return new Point2(x, y);
+            yield return new Point2(x, y, YAxisDirection);
         }
     }
 
@@ -89,7 +69,7 @@ public class Grid<T>
     {
         for (var x = Offset.X; x <  Offset.X + Width; x++)
         {
-            yield return new Point2(x, y);
+            yield return new Point2(x, y, YAxisDirection);
         }
     }
 
@@ -106,7 +86,7 @@ public class Grid<T>
             {
                 for (var x = Offset.X; x < Offset.X + Width; x++)
                 {
-                    yield return new Point2(x, y);
+                    yield return new Point2(x, y, YAxisDirection);
                 }
             }
         }

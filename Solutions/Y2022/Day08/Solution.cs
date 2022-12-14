@@ -1,6 +1,4 @@
 using AdventOfCode.Utilities;
-using Spectre.Console;
-using System.Drawing;
 
 namespace AdventOfCode.Y2022.Day08;
 
@@ -82,13 +80,13 @@ class Solution : ISolver
             return 0;
         }
 
-        var leftVisible = VisibleTrees(grid, point, p => p.AsRelative(grid.YAxisDirection).Left);
+        var leftVisible = VisibleTrees(grid, point, p => p.Left);
 
-        var rightVisible = VisibleTrees(grid, point, p => p.AsRelative(grid.YAxisDirection).Right);
+        var rightVisible = VisibleTrees(grid, point, p => p.Right);
 
-        var topVisible = VisibleTrees(grid, point, p => p.AsRelative(grid.YAxisDirection).Above);
+        var topVisible = VisibleTrees(grid, point, p => p.Above);
 
-        var bottomVisible = VisibleTrees(grid, point, p => p.AsRelative(grid.YAxisDirection).Below);
+        var bottomVisible = VisibleTrees(grid, point, p => p.Below);
 
         return leftVisible * rightVisible * topVisible * bottomVisible;
     }

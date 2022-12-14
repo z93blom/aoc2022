@@ -1,4 +1,6 @@
 using AdventOfCode.Utilities;
+using QuikGraph;
+
 //using Spectre.Console;
 
 namespace AdventOfCode.Y2022.Day14;
@@ -25,7 +27,7 @@ class Solution : ISolver
         while (!sandHasFallenIntoVoid)
         {
             // Start a new corn of sand at 500, 0
-            var sand = new Point2(500, 0).AsRelative(grid.YAxisDirection);
+            var sand = new Point2(500, 0, grid.YAxisDirection);
             while (true)
             {
                 while (grid.Contains(sand.Below) && grid[sand.Below] == '.')
@@ -70,7 +72,7 @@ class Solution : ISolver
         var points = input.Lines()
             .Select(l =>
                 l.Groups(@"(\d+),(\d+)")
-                    .Select(g => new Point2(int.Parse(g[0].ToString()), int.Parse(g[1].ToString())))
+                    .Select(g => new Point2(int.Parse(g[0].ToString()), int.Parse(g[1].ToString()), YAxisDirection.ZeroAtTop))
                     .ToArray())
             .ToArray();
 
@@ -88,7 +90,7 @@ class Solution : ISolver
 
         var width = maxX - minX + 1;
         var height = maxY - minY + 1;
-        var grid = new Grid<char>(width, height, new Point2(minX, minY), YAxisDirection.ZeroAtTop);
+        var grid = new Grid<char>(width, height, new Point2(minX, minY, YAxisDirection.ZeroAtTop));
         foreach (var point in grid.Points)
         {
             grid[point] = '.';
@@ -111,8 +113,8 @@ class Solution : ISolver
             grid[pointList[0]] = '#';
             while (index < pointList.Length)
             {
-                var next = pointList[index].AsRelative(grid.YAxisDirection);
-                Func<Point2Relative, Point2> movement;
+                var next = pointList[index];
+                Func<Point2, Point2> movement;
                 if (next.IsRightOf(current))
                 {
                     movement = p => p.Right;
@@ -132,7 +134,7 @@ class Solution : ISolver
 
                 while (current != next)
                 {
-                    current = movement(current.AsRelative(grid.YAxisDirection));
+                    current = movement(current);
                     grid[current] = '#';
                 }
 
@@ -150,11 +152,11 @@ class Solution : ISolver
 
         var sandCornsAtRest = 0;
         var sandIsStopped = false;
-        var sandOrigin = new Point2(500, 0);
+        var sandOrigin = new Point2(500, 0, grid.YAxisDirection);
         while (!sandIsStopped)
         {
             // Start a new corn of sand at 500, 0
-            var sand = sandOrigin.AsRelative(grid.YAxisDirection);
+            var sand = sandOrigin;
             while (true)
             {
                 while (grid.Contains(sand.Below) && grid[sand.Below] == '.')

@@ -82,11 +82,11 @@ class Solution : ISolver
                 {
                     case 'E':
                         map.Grid[x, yGrid] = 'z' - 'a';
-                        map.Target = new Point2(x, yGrid);
+                        map.Target = new Point2(x, yGrid, YAxisDirection.ZeroAtBottom);
                         break;
                     case 'S':
                         map.Grid[x, yGrid] = 'a' - 'a';
-                        map.StartingPosition = new Point2(x, yGrid);
+                        map.StartingPosition = new Point2(x, yGrid, YAxisDirection.ZeroAtBottom);
                         break;
                     default:
                         map.Grid[x, yGrid] = line[x] - 'a';

@@ -24,8 +24,8 @@ class Solution : ISolver
     {
         var steps = input.Lines().ToArray();
         var enableDebug = steps.Length < 20;
-        var headPos = new Point2(0, 0);
-        var tailPos = new Point2(0, 0);
+        var headPos = new Point2(0, 0, YAxisDirection.ZeroAtBottom);
+        var tailPos = new Point2(0, 0, YAxisDirection.ZeroAtBottom);
         HashSet<Point2> tailVisits = new() { tailPos };
         var sb = new StringBuilder();
 
@@ -38,16 +38,16 @@ class Solution : ISolver
             switch (step[0])
             {
                 case 'L':
-                    repositionFunc = p => p.AsRelative().Left;
+                    repositionFunc = p => p.Left;
                     break;
                 case 'R':
-                    repositionFunc = p => p.AsRelative().Right;
+                    repositionFunc = p => p.Right;
                     break;
                 case 'U':
-                    repositionFunc = p => p.AsRelative().Above;
+                    repositionFunc = p => p.Above;
                     break;
                 case 'D':
-                    repositionFunc = p => p.AsRelative().Below;
+                    repositionFunc = p => p.Below;
                     break;
                 default:
                     throw new InvalidOperationException("Unexpected head movement.");
@@ -57,7 +57,7 @@ class Solution : ISolver
             for(var i = 0; i < numberOfSteps; i++)
             {
                 headPos = repositionFunc(headPos);
-                tailPos = RecalculateTail(headPos, tailPos, repositionFunc);
+                tailPos = RecalculateTail(headPos, tailPos);
                 tailVisits.Add(tailPos);
 
 
@@ -82,7 +82,7 @@ class Solution : ISolver
         {
             for (var x = lowX; x <= highX; x++)
             {
-                var p = new Point2(x, y);
+                var p = new Point2(x, y, YAxisDirection.ZeroAtBottom);
                 if (Equals(head, p))
                 {
                     sb.Append('H');
@@ -109,55 +109,52 @@ class Solution : ISolver
         }
     }
 
-    public static Point2 RecalculateTail(Point2 p1, Point2 p2, Func<Point2, Point2> repositionFunc)
+    public static Point2 RecalculateTail(Point2 p1, Point2 p2)
     {
-        if (p1.AdjacentPoints.Contains(p2) || p1 == p2)
+        if (p1 == p2 || p1.AdjacentPoints.Contains(p2))
         {
             // The tail is already touching the head. Does not move.
             return p2;
         }
 
-        var p1r = p1.AsRelative();
-        var p2r = p2.AsRelative();
-
-        if (p1r.IsLeftOf(p2) && p1r.IsAbove(p2))
+        if (p1.IsLeftOf(p2) && p1.IsAbove(p2))
         {
-            return p2r.Left.Above;
+            return p2.Left.Above;
         }
 
-        if (p1r.IsLeftOf(p2) && p1r.IsBelow(p2))
+        if (p1.IsLeftOf(p2) && p1.IsBelow(p2))
         {
-            return p2r.Left.Below;
+            return p2.Left.Below;
         }
 
-        if (p1r.IsRightOf(p2) && p1r.IsAbove(p2))
+        if (p1.IsRightOf(p2) && p1.IsAbove(p2))
         {
-            return p2r.Right.Above;
+            return p2.Right.Above;
         }
 
-        if (p1r.IsRightOf(p2) && p1r.IsBelow(p2))
+        if (p1.IsRightOf(p2) && p1.IsBelow(p2))
         {
-            return p2r.Right.Below;
+            return p2.Right.Below;
         }
 
-        if (p1r.IsRightOf(p2))
+        if (p1.IsRightOf(p2))
         {
-            return p2r.Right;
+            return p2.Right;
         }
 
-        if (p1r.IsLeftOf(p2))
+        if (p1.IsLeftOf(p2))
         {
-            return p2r.Left;
+            return p2.Left;
         }
 
-        if (p1r.IsAbove(p2))
+        if (p1.IsAbove(p2))
         {
-            return p2r.Above;
+            return p2.Above;
         }
 
-        if (p1r.IsBelow(p2))
+        if (p1.IsBelow(p2))
         {
-            return p2r.Below;
+            return p2.Below;
         }
 
         throw new Exception("Something wrong!");
@@ -175,16 +172,16 @@ class Solution : ISolver
             switch (step[0])
             {
                 case 'L':
-                    repositionFunc = p => p.AsRelative().Left;
+                    repositionFunc = p => p.Left;
                     break;
                 case 'R':
-                    repositionFunc = p => p.AsRelative().Right;
+                    repositionFunc = p => p.Right;
                     break;
                 case 'U':
-                    repositionFunc = p => p.AsRelative().Above;
+                    repositionFunc = p => p.Above;
                     break;
                 case 'D':
-                    repositionFunc = p => p.AsRelative().Below;
+                    repositionFunc = p => p.Below;
                     break;
                 default:
                     throw new InvalidOperationException("Unexpected head movement.");
@@ -195,7 +192,7 @@ class Solution : ISolver
             {
                 knots[0] = repositionFunc(knots[0]);
                 for (var j = 1; j < knots.Length; j++)
-                    knots[j] = RecalculateTail(knots[j - 1], knots[j], repositionFunc);
+                    knots[j] = RecalculateTail(knots[j - 1], knots[j]);
 
                 tailVisits.Add(knots[9]);
             }
