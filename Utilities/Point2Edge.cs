@@ -8,6 +8,7 @@ namespace AdventOfCode.Utilities;
 /// <typeparam name="T">The type of data that each node holds.</typeparam>
 public class Point2Edge<T> : IEdge<Point2Node<T>>
 {
+
     public Point2Node<T> Source { get; }
     public Point2Node<T> Target { get; }
 
