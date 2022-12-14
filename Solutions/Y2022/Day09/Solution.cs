@@ -15,11 +15,12 @@ class Solution : ISolver
 
     public IEnumerable<object> Solve(string input, Func<TextWriter> getOutputFunction)
     {
-        yield return PartOne(input);
+        var emptyOutput = () => new NullTextWriter();
+        yield return PartOne(input, emptyOutput);
         yield return PartTwo(input);
     }
 
-    static object PartOne(string input)
+    static object PartOne(string input, Func<TextWriter> getOutputFunction)
     {
         var steps = input.Lines().ToArray();
         var enableDebug = steps.Length < 20;
@@ -28,24 +29,25 @@ class Solution : ISolver
         HashSet<Point2> tailVisits = new() { tailPos };
         var sb = new StringBuilder();
 
-        if (enableDebug) Console.WriteLine();
+        var output = getOutputFunction();
+        if (enableDebug) output.WriteLine();
         foreach (var step in steps)
         {
-            if (enableDebug) Console.WriteLine($"== {step} ==");
+            if (enableDebug) output.WriteLine($"== {step} ==");
             Func<Point2, Point2> repositionFunc;
             switch (step[0])
             {
                 case 'L':
-                    repositionFunc = p => p.Left;
+                    repositionFunc = p => p.AsRelative().Left;
                     break;
                 case 'R':
-                    repositionFunc = p => p.Right;
+                    repositionFunc = p => p.AsRelative().Right;
                     break;
                 case 'U':
-                    repositionFunc = p => p.Above;
+                    repositionFunc = p => p.AsRelative().Above;
                     break;
                 case 'D':
-                    repositionFunc = p => p.Below;
+                    repositionFunc = p => p.AsRelative().Below;
                     break;
                 default:
                     throw new InvalidOperationException("Unexpected head movement.");
@@ -60,8 +62,9 @@ class Solution : ISolver
 
 
                 if (enableDebug) DrawDebugGrid(headPos, tailPos, tailVisits, sb);
-                if (enableDebug) Console.Write(sb.ToString());
-                if (enableDebug) Console.WriteLine();
+                if (enableDebug) output.WriteLine(sb.ToString());
+                if (enableDebug) output.WriteLine();
+                if (enableDebug) output.WriteLine();
                 sb.Clear();
             }
         }
@@ -114,44 +117,47 @@ class Solution : ISolver
             return p2;
         }
 
-        if (p1.IsLeftOf(p2) && p1.IsAboveOf(p2))
+        var p1r = p1.AsRelative();
+        var p2r = p2.AsRelative();
+
+        if (p1r.IsLeftOf(p2) && p1r.IsAbove(p2))
         {
-            return p2.Left.Above;
+            return p2r.Left.Above;
         }
 
-        if (p1.IsLeftOf(p2) && p1.IsBelowOf(p2))
+        if (p1r.IsLeftOf(p2) && p1r.IsBelow(p2))
         {
-            return p2.Left.Below;
+            return p2r.Left.Below;
         }
 
-        if (p1.IsRightOf(p2) && p1.IsAboveOf(p2))
+        if (p1r.IsRightOf(p2) && p1r.IsAbove(p2))
         {
-            return p2.Right.Above;
+            return p2r.Right.Above;
         }
 
-        if (p1.IsRightOf(p2) && p1.IsBelowOf(p2))
+        if (p1r.IsRightOf(p2) && p1r.IsBelow(p2))
         {
-            return p2.Right.Below;
+            return p2r.Right.Below;
         }
 
-        if (p1.IsRightOf(p2))
+        if (p1r.IsRightOf(p2))
         {
-            return p2.Right;
+            return p2r.Right;
         }
 
-        if (p1.IsLeftOf(p2))
+        if (p1r.IsLeftOf(p2))
         {
-            return p2.Left;
+            return p2r.Left;
         }
 
-        if (p1.IsAboveOf(p2))
+        if (p1r.IsAbove(p2))
         {
-            return p2.Above;
+            return p2r.Above;
         }
 
-        if (p1.IsBelowOf(p2))
+        if (p1r.IsBelow(p2))
         {
-            return p2.Below;
+            return p2r.Below;
         }
 
         throw new Exception("Something wrong!");
@@ -169,16 +175,16 @@ class Solution : ISolver
             switch (step[0])
             {
                 case 'L':
-                    repositionFunc = p => p.Left;
+                    repositionFunc = p => p.AsRelative().Left;
                     break;
                 case 'R':
-                    repositionFunc = p => p.Right;
+                    repositionFunc = p => p.AsRelative().Right;
                     break;
                 case 'U':
-                    repositionFunc = p => p.Above;
+                    repositionFunc = p => p.AsRelative().Above;
                     break;
                 case 'D':
-                    repositionFunc = p => p.Below;
+                    repositionFunc = p => p.AsRelative().Below;
                     break;
                 default:
                     throw new InvalidOperationException("Unexpected head movement.");

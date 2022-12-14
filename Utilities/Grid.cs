@@ -4,24 +4,41 @@ namespace AdventOfCode.Utilities;
 
 public class Grid<T>
 {
-    private Point2 LowerLeft { get; } = new Point2(0, 0);
+    public YAxisDirection YAxisDirection { get; }
+    private Point2 Offset { get; }
     public long Width { get; }
     public long Height { get; }
+
     private readonly T[,] _values;
 
     public Grid(long width, long height)
+        : this(width, height, YAxisDirection.ZeroAtBottom)
     {
-        Width = width;
-        Height = height;
-        _values = new T[width, height];
     }
 
-    public Grid(Point2 lowerLeft, long width, long height)
+    public Grid(long width, long height, YAxisDirection yAxisDirection)
+        : this(width, height, Point2.Origin, yAxisDirection)
     {
-        LowerLeft = lowerLeft;
+    }
+
+    public Grid(long width, long height, Point2 offset, YAxisDirection yAxisDirection)
+    {
+        YAxisDirection = yAxisDirection;
+        Offset = offset;
         Width = width;
         Height = height;
-        _values = new T[width, height];
+        _values = new T[Width, Height];
+    }
+
+    public Grid(Point2 corner, Point2 oppositeCorner, YAxisDirection yAxisDirection)
+    {
+        YAxisDirection = yAxisDirection;
+        var offset = new Point2(Math.Min(corner.X, oppositeCorner.X), Math.Min(corner.Y, oppositeCorner.Y));
+
+        Offset = offset;
+        Width = Math.Max(corner.X, oppositeCorner.X) - offset.X;
+        Height = Math.Max(corner.X, oppositeCorner.X) - offset.Y;
+        _values = new T[Width, Height];
     }
 
     public T this[long x, long y]
@@ -29,6 +46,14 @@ public class Grid<T>
         get => this[new Point2(x, y)];
         set => this[new Point2(x, y)] = value;
     }
+
+    public Point2 Right(Point2 p) => p with { X = p.X + 1 };
+
+    public Point2 Left(Point2 p) => p with { X = p.X - 1 };
+
+    public Point2 Above(Point2 p) => p with { Y = YAxisDirection == YAxisDirection.ZeroAtBottom ? p.Y + 1 : p.Y - 1 };
+
+    public Point2 Below(Point2 p) => p with { Y = YAxisDirection == YAxisDirection.ZeroAtBottom ? p.Y - 1 : p.Y + 1 };
 
     public T this[Point2 p]
     {
@@ -39,7 +64,7 @@ public class Grid<T>
                 throw new ArgumentOutOfRangeException(nameof(p));
             }
 
-            return _values[p.X - LowerLeft.X, p.Y - LowerLeft.Y];
+            return _values[p.X - Offset.X, p.Y - Offset.Y];
         }
         set
         {
@@ -48,13 +73,13 @@ public class Grid<T>
                 throw new ArgumentOutOfRangeException(nameof(p));
             }
 
-            _values[p.X - LowerLeft.X, p.Y - LowerLeft.Y] = value;
+            _values[p.X - Offset.X, p.Y - Offset.Y] = value;
         }
     }
 
     public IEnumerable<Point2> YSlice(long x)
     {
-        for (var y = LowerLeft.Y; y < LowerLeft.Y + Height; y++)
+        for (var y = Offset.Y; y < Offset.Y + Height; y++)
         {
             yield return new Point2(x, y);
         }
@@ -62,7 +87,7 @@ public class Grid<T>
 
     public IEnumerable<Point2> XSlice(long y)
     {
-        for (var x = LowerLeft.X; x <  LowerLeft.X + Width; x++)
+        for (var x = Offset.X; x <  Offset.X + Width; x++)
         {
             yield return new Point2(x, y);
         }
@@ -70,16 +95,16 @@ public class Grid<T>
 
     public bool IsEdge(Point2 p)
     {
-        return p.X == LowerLeft.X || p.Y == LowerLeft.Y || p.X == LowerLeft.X + Width - 1 || p.Y == LowerLeft.Y + Height - 1;
+        return p.X == Offset.X || p.Y == Offset.Y || p.X == Offset.X + Width - 1 || p.Y == Offset.Y + Height - 1;
     }
 
     public IEnumerable<Point2> Points
     {
         get
         {
-            for (var y = LowerLeft.Y; y < LowerLeft.Y + Height; y++)
+            for (var y = Offset.Y; y < Offset.Y + Height; y++)
             {
-                for (var x = LowerLeft.X; x < LowerLeft.X + Width; x++)
+                for (var x = Offset.X; x < Offset.X + Width; x++)
                 {
                     yield return new Point2(x, y);
                 }
@@ -89,12 +114,12 @@ public class Grid<T>
 
     public bool Contains(Point2 p)
     {
-        if (p.X < LowerLeft.X || p.X >= LowerLeft.X + Width)
+        if (p.X < Offset.X || p.X >= Offset.X + Width)
         {
             return false;
         }
 
-        if (p.Y < LowerLeft.Y || p.Y >= LowerLeft.Y + Height)
+        if (p.Y < Offset.Y || p.Y >= Offset.Y + Height)
         {
             return false;
         }
@@ -111,9 +136,9 @@ public class Grid<T>
     {
         var sb = new StringBuilder();
 
-        for (var y = LowerLeft.Y; y < LowerLeft.Y + Height; y++)
+        for (var y = Offset.Y; y < Offset.Y + Height; y++)
         {
-            for (var x = LowerLeft.X; x < LowerLeft.X + Width; x++)
+            for (var x = Offset.X; x < Offset.X + Width; x++)
             {
                 sb.Append(this[x, y]);
                 if (x < Width - 1)
@@ -127,4 +152,10 @@ public class Grid<T>
 
         return sb.ToString();
     }
+}
+
+public enum YAxisDirection
+{
+    ZeroAtBottom = 0,
+    ZeroAtTop,
 }

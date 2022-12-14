@@ -137,6 +137,16 @@ namespace AdventOfCode.Utilities
             return collection;
         }
 
+        public static IEnumerable<Group[]> Groups(this string s, string pattern)
+        {
+            var collection = Regex.Matches(s, pattern);
+            foreach (Match match in collection)
+            {
+                yield return match.Groups.Cast<Group>().Skip(1).ToArray();
+            }
+        }
+
+
         public static IEnumerable<Group[]> Matches(this IEnumerable<string> strings, string pattern)
         {
             foreach(var s in strings)

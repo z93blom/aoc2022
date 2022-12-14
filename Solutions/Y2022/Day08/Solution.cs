@@ -82,13 +82,13 @@ class Solution : ISolver
             return 0;
         }
 
-        var leftVisible = VisibleTrees(grid, point, p => p.Left);
+        var leftVisible = VisibleTrees(grid, point, p => p.AsRelative(grid.YAxisDirection).Left);
 
-        var rightVisible = VisibleTrees(grid, point, p => p.Right);
+        var rightVisible = VisibleTrees(grid, point, p => p.AsRelative(grid.YAxisDirection).Right);
 
-        var topVisible = VisibleTrees(grid, point, p => p.Above);
+        var topVisible = VisibleTrees(grid, point, p => p.AsRelative(grid.YAxisDirection).Above);
 
-        var bottomVisible = VisibleTrees(grid, point, p => p.Below);
+        var bottomVisible = VisibleTrees(grid, point, p => p.AsRelative(grid.YAxisDirection).Below);
 
         return leftVisible * rightVisible * topVisible * bottomVisible;
     }

@@ -25,12 +25,12 @@ class Solution : ISolver
         while (!sandHasFallenIntoVoid)
         {
             // Start a new corn of sand at 500, 0
-            var sand = new Point2(500, 0);
+            var sand = new Point2(500, 0).AsRelative(grid.YAxisDirection);
             while (true)
             {
-                while (grid.Contains(sand.Above) && grid[sand.Above] == '.')
+                while (grid.Contains(sand.Below) && grid[sand.Below] == '.')
                 {
-                    sand = sand.Above;
+                    sand = sand.Below;
                 }
 
                 if (grid.IsEdge(sand))
@@ -39,13 +39,13 @@ class Solution : ISolver
                     break;
                 }
 
-                if (grid[sand.Above.Left] == '.')
+                if (grid[sand.Below.Left] == '.')
                 {
-                    sand = sand.Above.Left;
+                    sand = sand.Below.Left;
                 }
-                else if (grid[sand.Above.Right] == '.')
+                else if (grid[sand.Below.Right] == '.')
                 {
-                    sand = sand.Above.Right;
+                    sand = sand.Below.Right;
                 }
                 else
                 {
@@ -69,16 +69,15 @@ class Solution : ISolver
         //var groups = input.Lines().Matches(@"(\d+),(\d+)").ToArray();
         var points = input.Lines()
             .Select(l =>
-                l.Matches(@"(\d+),(\d+)")
-                    .Select(m => new Point2(int.Parse(m.Groups[1].ToString()), int.Parse(m.Groups[2].ToString())))
+                l.Groups(@"(\d+),(\d+)")
+                    .Select(g => new Point2(int.Parse(g[0].ToString()), int.Parse(g[1].ToString())))
                     .ToArray())
             .ToArray();
 
-        var integers = input.Integers().ToArray();
-        var minX = integers.Where((_, index) => index % 2 == 0).Min() - 2;
-        var maxX = integers.Where((_, index) => index % 2 == 0).Max() + 2;
-        const int minY = 0; // integers.Where((_, index) => index % 2 == 1).Min();
-        var maxY = integers.Where((_, index) => index % 2 == 1).Max();
+        var minX = points.SelectMany(p => p).Select(p => p.X).Min() - 2;
+        var maxX = points.SelectMany(p => p).Select(p => p.X).Max() + 2;
+        const int minY = 0; 
+        var maxY = points.SelectMany(p => p).Select(p => p.Y).Max();
 
         if (addFloor)
         {
@@ -87,7 +86,9 @@ class Solution : ISolver
             maxX = Math.Max(maxX, 500 + maxY) + 2;
         }
 
-        var grid = new Grid<char>(new Point2(minX, minY), maxX - minX + 1, maxY - minY + 1);
+        var width = maxX - minX + 1;
+        var height = maxY - minY + 1;
+        var grid = new Grid<char>(width, height, new Point2(minX, minY), YAxisDirection.ZeroAtTop);
         foreach (var point in grid.Points)
         {
             grid[point] = '.';
@@ -110,8 +111,8 @@ class Solution : ISolver
             grid[pointList[0]] = '#';
             while (index < pointList.Length)
             {
-                var next = pointList[index];
-                Func<Point2, Point2> movement;
+                var next = pointList[index].AsRelative(grid.YAxisDirection);
+                Func<Point2Relative, Point2> movement;
                 if (next.IsRightOf(current))
                 {
                     movement = p => p.Right;
@@ -120,18 +121,18 @@ class Solution : ISolver
                 {
                     movement = p => p.Left;
                 }
-                else if (next.IsAboveOf(current))
+                else if (next.IsAbove(current))
                 {
                     movement = p => p.Above;
                 }
-                else //if (next.IsBelowOf(current))
+                else //if (next.IsBelow(current))
                 {
                     movement = p => p.Below;
                 }
 
                 while (current != next)
                 {
-                    current = movement(current);
+                    current = movement(current.AsRelative(grid.YAxisDirection));
                     grid[current] = '#';
                 }
 
@@ -153,21 +154,21 @@ class Solution : ISolver
         while (!sandIsStopped)
         {
             // Start a new corn of sand at 500, 0
-            var sand = sandOrigin;
+            var sand = sandOrigin.AsRelative(grid.YAxisDirection);
             while (true)
             {
-                while (grid.Contains(sand.Above) && grid[sand.Above] == '.')
+                while (grid.Contains(sand.Below) && grid[sand.Below] == '.')
                 {
-                    sand = sand.Above;
+                    sand = sand.Below;
                 }
 
-                if (grid[sand.Above.Left] == '.')
+                if (grid[sand.Below.Left] == '.')
                 {
-                    sand = sand.Above.Left;
+                    sand = sand.Below.Left;
                 }
-                else if (grid[sand.Above.Right] == '.')
+                else if (grid[sand.Below.Right] == '.')
                 {
-                    sand = sand.Above.Right;
+                    sand = sand.Below.Right;
                 }
                 else
                 {
