@@ -127,57 +127,6 @@ class Solution : ISolver
             
         }
 
-        //return 0;
-
-
-        // Brute force - let's see if it works
-        //var output = getOutputFunction();
-        //for (var y = 0; y <= max; y++)
-        //{
-        //    if (y % 10_000 == 0)
-        //    {
-        //        output.Write($" {y}");
-        //    }
-
-        //    for (var x = 0; x <= max; x++)
-        //    {
-        //        Point2 p = new (x, y, yAxis);
-        //        if (sensorAndDistance.All(a => a.sensor.ManhattanDistance(p) > a.distance))
-        //        {
-        //            beaconLocation = p;
-        //            break;
-        //        }
-        //    }
-
-        //    //var remaining = new HashSet<int>(Enumerable.Range(0, max + 1));
-        //    //foreach (var (sensor, beacon) in sensorsAndBeacons)
-        //    //{
-        //    //    // For each sensor - figure out how far it is from its beacon (Manhattan distance).
-        //    //    var distance = sensor.ManhattanDistance(beacon);
-
-        //    //    // Then, figure out how far away that sensor is from the target y-line,
-        //    //    var distanceFromTarget = Math.Abs(sensor.Y - y);
-
-        //    //    // and mark certain positions on that y-line as "covered".
-        //    //    var remainingSquaresAtTarget = distance - distanceFromTarget;
-        //    //    for (var x = sensor.X - remainingSquaresAtTarget; x <= sensor.X + remainingSquaresAtTarget; x++)
-        //    //    {
-        //    //        remaining.Remove((int)x);
-        //    //    }
-
-        //    //    if (remaining.Count == 0)
-        //    //    {
-        //    //        break;
-        //    //    }
-        //    //}
-
-        //    //if (remaining.Count == 1)
-        //    //{
-        //    //    beaconLocation = new Point2(remaining.First(), y, yAxis);
-        //    //    break;
-        //    //}
-        //}
-
         return beaconLocation.X * 4000000 + beaconLocation.Y;
     }
 }
