@@ -1,5 +1,10 @@
+using System.Diagnostics;
 using System.Drawing;
+using System.Numerics;
+using System.Text.RegularExpressions;
+using System.Text;
 using AdventOfCode.Utilities;
+using QuikGraph.Algorithms;
 
 namespace AdventOfCode.Y2022.Day15;
 
@@ -68,39 +73,112 @@ class Solution : ISolver
             .Select(i => (new Point2(i[0], i[1], yAxis), new Point2(i[2], i[3], yAxis)))
             .ToArray();
         var beaconLocation = new Point2();
+        var sensorAndDistance =
+            sensorsAndBeacons.Select(sAndB => (sensor: sAndB.Item1, beacon: sAndB.Item2, distance:sAndB.Item1.ManhattanDistance(sAndB.Item2)))
+                .ToArray();
 
-        // Brute force - let's see if it works
-        for (var y = 0; y <= max; y++)
+        // The beacon location has to be just outside of the sensors.
+
+        // Get all the locations that are 1 step outside of the sensors.
+        var justOutside = new HashSet<Point2>();
+        foreach (var (sensor, _, distance) in sensorAndDistance)
         {
-            var remaining = new HashSet<int>(Enumerable.Range(0, max + 1));
-            foreach (var (sensor, beacon) in sensorsAndBeacons)
+            var p = sensor with { Y = sensor.Y - distance - 1 };
+            if (p.X >= 0 && p.X <= max && p.Y >= 0 && p.Y <= max) justOutside.Add(p);
+            while (p.Y != sensor.Y)
             {
-                // For each sensor - figure out how far it is from its beacon (Manhattan distance).
-                var distance = sensor.ManhattanDistance(beacon);
+                p = p.Right.Below;
+                if (p.X >= 0 && p.X <= max && p.Y >= 0 && p.Y <= max) justOutside.Add(p);
+            }
+            while (p.X != sensor.X)
+            {
+                p = p.Left.Below;
+                if (p.X >= 0 && p.X <= max && p.Y >= 0 && p.Y <= max) justOutside.Add(p);
+            }
+            while (p.Y != sensor.Y)
+            {
+                p = p.Left.Above;
+                if (p.X >= 0 && p.X <= max && p.Y >= 0 && p.Y <= max) justOutside.Add(p);
+            }
+            while (p.X != sensor.X)
+            {
+                p = p.Right.Above;
+                if (p.X >= 0 && p.X <= max && p.Y >= 0 && p.Y <= max) justOutside.Add(p);
+            }
+        }
 
-                // Then, figure out how far away that sensor is from the target y-line,
-                var distanceFromTarget = Math.Abs(sensor.Y - y);
-
-                // and mark certain positions on that y-line as "covered".
-                var remainingSquaresAtTarget = distance - distanceFromTarget;
-                for (var x = sensor.X - remainingSquaresAtTarget; x <= sensor.X + remainingSquaresAtTarget; x++)
+        foreach (var p in justOutside)
+        {
+            var isInsideSensorRange = false;
+            foreach (var (sensor, beacon, distance) in sensorAndDistance)
+            {
+                if (p == beacon || p == sensor || sensor.ManhattanDistance(p) <= distance)
                 {
-                    remaining.Remove((int)x);
-                }
-
-                if (remaining.Count == 0)
-                {
+                    isInsideSensorRange = true;
                     break;
                 }
             }
 
-            if (remaining.Count == 1)
+            if (!isInsideSensorRange)
             {
-                beaconLocation = new Point2(remaining.First(), y, yAxis);
+                beaconLocation = p;
                 break;
             }
+            
         }
+
+        //return 0;
+
+
+        // Brute force - let's see if it works
+        //var output = getOutputFunction();
+        //for (var y = 0; y <= max; y++)
+        //{
+        //    if (y % 10_000 == 0)
+        //    {
+        //        output.Write($" {y}");
+        //    }
+
+        //    for (var x = 0; x <= max; x++)
+        //    {
+        //        Point2 p = new (x, y, yAxis);
+        //        if (sensorAndDistance.All(a => a.sensor.ManhattanDistance(p) > a.distance))
+        //        {
+        //            beaconLocation = p;
+        //            break;
+        //        }
+        //    }
+
+        //    //var remaining = new HashSet<int>(Enumerable.Range(0, max + 1));
+        //    //foreach (var (sensor, beacon) in sensorsAndBeacons)
+        //    //{
+        //    //    // For each sensor - figure out how far it is from its beacon (Manhattan distance).
+        //    //    var distance = sensor.ManhattanDistance(beacon);
+
+        //    //    // Then, figure out how far away that sensor is from the target y-line,
+        //    //    var distanceFromTarget = Math.Abs(sensor.Y - y);
+
+        //    //    // and mark certain positions on that y-line as "covered".
+        //    //    var remainingSquaresAtTarget = distance - distanceFromTarget;
+        //    //    for (var x = sensor.X - remainingSquaresAtTarget; x <= sensor.X + remainingSquaresAtTarget; x++)
+        //    //    {
+        //    //        remaining.Remove((int)x);
+        //    //    }
+
+        //    //    if (remaining.Count == 0)
+        //    //    {
+        //    //        break;
+        //    //    }
+        //    //}
+
+        //    //if (remaining.Count == 1)
+        //    //{
+        //    //    beaconLocation = new Point2(remaining.First(), y, yAxis);
+        //    //    break;
+        //    //}
+        //}
 
         return beaconLocation.X * 4000000 + beaconLocation.Y;
     }
 }
+
