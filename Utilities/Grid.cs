@@ -137,9 +137,3 @@ public class Grid<T>
         return sb.ToString();
     }
 }
-
-public enum YAxisDirection
-{
-    ZeroAtBottom = 0,
-    ZeroAtTop,
-}

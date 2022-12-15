@@ -52,6 +52,11 @@ public record struct Point2(long X, long Y, YAxisDirection YAxis)
         }
     }
 
+    public long ManhattanDistance(Point2 p)
+    {
+        return Math.Abs(X - p.X) + Math.Abs(Y - p.Y);
+    }
+
     public override string ToString()
     {
         return $"({X}, {Y})";

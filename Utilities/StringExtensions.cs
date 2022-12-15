@@ -154,6 +154,18 @@ namespace AdventOfCode.Utilities
         }
 
 
+        public static IEnumerable<Group[]> Groups(this IEnumerable<string> strings, [StringSyntax(StringSyntaxAttribute.Regex)] string pattern)
+        {
+            foreach (var s in strings)
+            {
+                if (s.Matches(pattern, out var groups))
+                {
+                    yield return groups.ToArray();
+                }
+            }
+        }
+
+
         public static IEnumerable<Group[]> Matches(this IEnumerable<string> strings, [StringSyntax(StringSyntaxAttribute.Regex)] string pattern)
         {
             foreach(var s in strings)
