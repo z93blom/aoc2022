@@ -88,7 +88,7 @@ class Solution : ISolver
                 // Shortcut - all possible valves are opened.
                 if (state.OpenedValves.Length == numberOfPossibleValves)
                 {
-                    newStates.Add(state);
+                    newStates.Add(newState);
                     continue;
                 }
 
@@ -99,7 +99,7 @@ class Solution : ISolver
                 var loc1 = state.Location;
                 var loc2 = state.ElephantLocation;
 
-                if (loc1.FlowRate > 0 && !state.OpenedValves.Contains(loc1) && loc2.FlowRate > 0 && !state.OpenedValves.Contains(loc2))
+                if (loc1 != loc2 && loc1.FlowRate > 0 && !state.OpenedValves.Contains(loc1) && loc2.FlowRate > 0 && !state.OpenedValves.Contains(loc2))
                 {
                     // Both valves can be opened.
                     newStates.Add(newState with { OpenedValves = state.OpenedValves.Add(loc1).Add(loc2) });
@@ -123,7 +123,7 @@ class Solution : ISolver
 
                 foreach (var tunnel in state.Location.Tunnels)
                 {
-                    foreach (var elephantTunnel in state.ElephantLocation.Tunnels.Except(new []{tunnel}))
+                    foreach (var elephantTunnel in state.ElephantLocation.Tunnels)
                     {
                         newStates.Add(newState with { Location = rooms[tunnel], ElephantLocation = rooms[elephantTunnel] });
                     }
